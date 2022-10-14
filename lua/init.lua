@@ -18,11 +18,17 @@ M.config = {
 				c = { "<cmd>GoCmt<Cr>", "Generate Comment" },
 			},
 		},
-		ts = {
-			L = {
-				name = "JS",
-				i = { "<cmd>TSInstallFromGrammar<Cr>", "Install TS Grammar" },
-				u = { "<cmd>TSUpdate<Cr>", "Update TS Grammars" },
+		typescript = {
+			t = {
+				name = "TypeScript",
+				a = { "<cmd>TSLspOrganize<cr>", "Organize Imports" },
+				A = { "<cmd>TSLspOrganize<cr>", "Organize Imports" },
+				f = { "<cmd>TSLspFixCurrent<cr>", "Fix Current" },
+				F = { "<cmd>TSLspFixCurrent<cr>", "Fix Current" },
+				r = { "<cmd>TSLspRenameFile<cr>", "Rename File" },
+				R = { "<cmd>TSLspRenameFile<cr>", "Rename File" },
+				i = { "<cmd>TSLspImportAll<cr>", "Import All" },
+				I = { "<cmd>TSLspImportAll<cr>", "Import All" },
 			},
 		},
 	},
@@ -49,11 +55,14 @@ M.create_mapping = function(ft)
 	whichkey.register(mappings, opts)
 end
 
-M.setup = function()
-	if not M.config.enable then
+M.setup = function(config)
+	if not config.enabled then
 		return
 	end
-	local filetypes = M.config.filetypes
+	if config then
+		M.config = vim.tbl_deep_extend("force", M.config, config)
+	end
+	local filetypes = config
 	for ft, _ in pairs(filetypes) do
 		M.create_autocmd(ft)
 	end
